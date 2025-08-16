@@ -13,7 +13,7 @@ struct TrieNode {
     TrieNode* letters[26];  //Storage of the Trie Nodes that a word leads to. Will be initialized to NULL for each position
     char letter;            //The stored letter at the node in the chain of prefixes
     int useCount;           //How many words used this node in its prefix. Can be the starting letter or even multiple characters in
-
+    TrieNode* previous;
 };
 
 // Trie data structure
@@ -38,8 +38,9 @@ public:
     void insertSentence(string sentence);  //Take in a full sentence and insert in the trie
     void giveRecommendedWord(string prefix);   //Taking in an incomplete word give a recommendation for what word can be shown (to demonstrate autocorrect possibilities)
     void mostCommonWords();  //Take look through the root and see what the most common word is at that point in time
-    void mostCommonWordHelper(int& max, TrieNode* node);
+    TrieNode* mostCommonWordHelper(int& max, TrieNode* node);
     void mostCommonWord();  //Take look through the root and see what the most common letter combination is
+    void reverseTraversal(TrieNode* node);  //Print out the word that comes from this node, used with end of tree node
 };
 
 #endif

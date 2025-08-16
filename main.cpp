@@ -40,7 +40,7 @@ int main(){
             test.insert(thing);
             break;
             case 2:
-            test.mostCommonWord();
+            test.mostCommonWords();
             break;
             case 3:
             cout << "Enter the word you wish to remove fully: " << endl;

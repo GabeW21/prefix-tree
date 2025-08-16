@@ -6,6 +6,7 @@ Trie::Trie(){//Using to construct the root with a defined TrieNode and setting a
     root = new TrieNode();
     root->isEndOfWord = false;
     root->useCount = 0;
+    root->previous = NULL;
 
     for (int i = 0; i < 26; i ++){
         root->letters[i] = NULL;
@@ -59,6 +60,7 @@ void Trie::insert(string word){//Standard Trie insert for word
             curr->letters[n-'a'] = newNode; 
         }
         curr->letters[n-'a']->useCount++;
+        curr->letters[n-'a']->previous = curr;
         curr = curr->letters[n-'a'];
     }
     curr->isEndOfWord = true;
@@ -208,15 +210,40 @@ void Trie::mostCommonWord(){//Take look through the root and see what the most c
     }
 } 
 
-void Trie::mostCommonWords(){
-    TrieNode* node = root;
+TrieNode* Trie::mostCommonWordHelper(int& max, TrieNode* node) {
+    TrieNode* bestNode = nullptr;
+    for (int i = 0; i < 26; i++) {
+        if (node->letters[i] != nullptr) {
+            TrieNode* candidate = mostCommonWordHelper(max, node->letters[i]);
+            if (candidate != nullptr && candidate->useCount > max) {
+                max = candidate->useCount;
+                bestNode = candidate;
+            }
+        }
+    }
+    if (node->isEndOfWord && node->useCount > max) {
+        max = node->useCount;
+        bestNode = node;
+    }
+
+    return bestNode;
+}
+
+void Trie::mostCommonWords() {
     int max = 0;
-    mostCommonWordHelper(max,node);
-
+    TrieNode* result = mostCommonWordHelper(max, root);
+    if (result) {
+        cout << "Most common word has count: " << max << endl;
+        reverseTraversal(result);
+    } else {
+        cout << "No words found." << endl;
+    }
 }
 
-void Trie::mostCommonWordHelper(int& max, TrieNode* node){
-
+void Trie::reverseTraversal(TrieNode* node){
+    reverseTraversal(node->previous);
+    cout << node->letter;
 }
+
 
 #endif
